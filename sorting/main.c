@@ -1,86 +1,95 @@
-#include "../libft/libft.h"
+#include "libft/libft.h"
 #include <stdio.h>
 
-void	del(void *data, size_t size)
+int     cmp(const t_list *one, const t_list *two)
 {
-	if (size != 0)
-		free(data);
+    return (*((int *)one->content) < *((int *)two->content));
 }
 
-static t_list	*get_before_min(t_list *lst)
+void    del(void *data, size_t size)
 {
-	t_list	*min;
-	t_list	*prev;
-
-	if (!lst->next)
-		return (NULL);
-	
-	min = lst;
-	prev = NULL;
-	while (lst->next)
-	{
-		if (((int *)min->content) > ((int *)lst->next->content))
-		{
-			min = lst->next;
-			prev = lst;
-		}
-		lst = lst->next;
-	}
-	return prev;
+    if (size != 0)
+        free(data);
 }
 
-t_list	*sort_files(t_list *lst)
+t_list  *before_min(t_list *lst, int cmp(const t_list *, const t_list *))
 {
-	t_list	*sorted;
-	t_list	*q;
+    t_list  *min;
+    t_list  *prev;
 
-	if (!lst)
-		return (NULL);
-	sorted = NULL;
-	while (lst)
-	{
-		if ((q = get_before_min(lst)))
-		{
-			printf("%d", *((int *)q->content));
-			q->next = q->next->next;
-			q->next->next = sorted;
-			sorted = q->next;
-		}
-		else
-		{
-			printf("q == NULL\n");
-			q = lst;
-			lst = lst->next;
-			q->next = sorted;
-			sorted = q;
-		}
-	}
-	return sorted;
+    if (!lst->next)
+        return (NULL);
+    prev = NULL;
+    min = lst;
+    while (lst->next)
+    {
+        if (cmp(lst->next, min))
+        {
+            min = lst->next;
+            prev = lst;
+        }
+        lst = lst->next;
+    }
+    return (prev);
 }
 
-void	ft_lstprint(t_list *lst)
+t_list  *sort(t_list *lst, int cmp(const t_list *, const t_list *))
 {
-	while (lst)
-	{
-		printf("%d\n", *((int*)lst->content));
-		lst = lst->next;
-	}
+    t_list  *sorted;
+    t_list  *prev;
+    t_list  *next;
+
+    sorted = NULL;
+    while (lst)
+    {
+        prev = before_min(lst, cmp);
+        if (!prev)
+        {
+            next = lst->next;
+            lst->next = NULL;
+            ft_lstappend(&sorted, lst);
+            lst = next;
+        }
+        else
+        {
+            next = prev->next->next;
+            prev->next->next = NULL;
+            ft_lstappend(&sorted, prev->next);
+            prev->next = next;
+        }
+    }
+    return (sorted);
 }
 
-int	main(int argc, char **argv)
+void    lstprint(t_list *lst)
 {
-	t_list	*lst;
-	t_list	*item;
+    while (lst)
+    {
+        printf("%d ", *((int *)lst->content));
+        lst = lst->next;
+    }
+    printf("\n");
+}
 
-	lst = NULL;
-	for (int i = 1; i < argc; ++i)
-	{
-		int val = atoi(argv[i]);
-		item = ft_lstnew(&val, sizeof(int));
-		ft_lstappend(&lst, item);
-	}
-	lst = sort_files(lst);
-	ft_lstprint(lst);
-	ft_lstdel(&lst, del);
-	return (0);
+int     main(int argc, char **argv)
+{
+    if (argc < 2)
+    {
+        printf("Usage: ./a.out [list_item1, list_item2, ...]\n");
+        return (1);
+    }
+
+    // creating a new unordered list
+    t_list  *lst = NULL;
+    for (int i = 1; i < argc; ++i)
+    {
+        int     val = ft_atoi(argv[i]);
+        t_list  *item = ft_lstnew(&val, sizeof(int));
+        ft_lstadd(&lst, item);
+    }
+    lstprint(lst);
+    lst = sort(lst, cmp);
+    lstprint(lst);
+    ft_lstdel(&lst, del);
+    return (0);
 }
