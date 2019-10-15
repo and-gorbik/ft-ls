@@ -2,6 +2,7 @@
 # define FT_LS_H
 
 #include <stdio.h>
+# include <string.h>
 # include <dirent.h>
 # include <sys/stat.h>
 // # include <pwd.h>
@@ -38,7 +39,7 @@ typedef struct group	t_group;
 ** type     - the file type
 ** time     - the last modification time
 ** name     - the file name
-** path     - the full file path
+** path     - the full file path (without file name)
 ** next     - 
 */
 
@@ -65,12 +66,14 @@ int                     parse_flags(t_flags *flags, int argc, char **argv);
 ** print errors
 */
 void                    print_usage(char *src);
-void                    print_no_such_file(char *src);
+void                    print_errno(char *src);
 
 /*
-** create a list of files
+** work with lists
 */
-t_list                  *create_files_list(int argc, char **argv);
+t_list                  *create_list_from_args(int argc, char **argv);
+t_list					*create_list_from_dir(char path[PATH_MAX], char *name, t_flags *flags);
+int						append_file(t_list **lst, char path[PATH_MAX], char *name);
 
 /*
 ** helper functions

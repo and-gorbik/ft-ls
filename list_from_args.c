@@ -49,7 +49,7 @@ static t_list   *new_file(char path[PATH_MAX], const char *name, const t_stat *s
 	return (new);
 }
 
-static int		append_file(t_list **lst, char path[PATH_MAX], char *name)
+int		append_file(t_list **lst, char path[PATH_MAX], char *name)
 {
 	char	full_path[PATH_MAX];
 	t_stat	stat;
@@ -65,7 +65,7 @@ static int		append_file(t_list **lst, char path[PATH_MAX], char *name)
 	return (1);
 }
 
-t_list          *create_files_list(int argc, char **argv)
+t_list          *create_list_from_args(int argc, char **argv)
 {
 	t_list	*begin;
 	int		i;
@@ -74,19 +74,19 @@ t_list          *create_files_list(int argc, char **argv)
 	while (i < argc && argv[i][0] == '-' && argv[i][1])
         ++i;
 	begin = NULL;
-	if (argc == 1)
+	if (argc == i)
 		append_file(&begin, "", ".");
 	// sort strings - потому что ошибки выводятся в алфавитном порядке
     while (i < argc)
     {
 		if (!(append_file(&begin, "", argv[i])))
-			print_no_such_file(argv[i]);
+			print_errno(argv[i]);
 		++i;
     }
 	return (begin);
 }
 
-// void			delete_files_list(t_list **lst)
+// void			delete_args_list(t_list **lst)
 // {
 // 	t_list	*cur;
 

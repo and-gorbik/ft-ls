@@ -117,10 +117,99 @@
 
 void	ft_lstprint(t_list *lst)
 {
+	// printf("->ft_lstprint\n");
 	while (lst)
 	{
 		printf("%s\n", ((t_file*)lst->content)->name);
 		lst = lst->next;
+	}
+}
+
+
+void	print_full_path(const char *path, t_flags *flags)
+{
+	// printf("->print_full_path: %s\n", path);
+	if (flags->rr)
+	{
+		ft_putstr(path);
+		ft_putendl(":");
+	}
+}
+
+t_list	*create_list_from_dir(char path[PATH_MAX], char *name, t_flags *flags)
+{
+	// printf("->create_list_from_dir: %s %s\n", path, name);
+	(void)flags;
+	DIR				*d;
+	struct dirent	*file;
+	t_list			*lst;
+
+	if (d = opendir(path), !d)
+	{
+		print_errno(name);
+		return (NULL);
+	}
+	lst = NULL;
+	while ((file = readdir(d)))
+	{
+		if (ft_strcmp(file->d_name, ".") && ft_strcmp(file->d_name, ".."))
+			if (!append_file(&lst, path, file->d_name))
+				print_errno(file->d_name);
+	}
+	closedir(d);
+	return (lst);
+}
+
+t_list	*sort_list(t_list *lst, t_flags *flags)
+{
+	// printf("->sort_list\n");
+	(void)flags;
+	return (lst);
+}
+
+void	delete_list(t_list **lst)
+{
+	// освободить память!!!
+	// printf("->delete_list\n");
+	*lst = NULL;
+}
+
+void	print_list(t_list *lst, t_flags *flags)
+{
+	// printf("->print_list\n\n");
+	(void)flags;
+	while (lst)
+	{
+		ft_putendl(((t_file *)lst->content)->name);
+		lst = lst->next;
+	}
+}
+
+void	print(t_list *begin, t_flags *flags)
+{
+	// printf("->print\n");
+	t_list	*cur;
+	t_file	*file;
+
+	cur = begin;
+	while (cur)
+	{
+		file = (t_file *)cur->content;
+		if (S_ISDIR(file->mode))
+		{
+			// display full path where it's needed
+			print_full_path(file->path, flags);
+			begin = create_list_from_dir(file->path, file->name, flags);
+			if (begin)
+			{
+				begin = sort_list(begin, flags);
+				print_list(begin, flags);
+				if (flags->rr)
+					print(begin, flags);
+				delete_list(&begin);
+			}
+		}
+		cur = cur->next;
 	}
 }
 
@@ -131,10 +220,9 @@ int		main(int argc, char **argv)
 
 	if (!parse_flags(&flags, argc, argv))
 		return (1);
-	if (!(files = create_files_list(argc, argv)))
+	if (!(files = create_list_from_args(argc, argv)))
 		return (1);
-	// print(files, flags);
+	print(files, &flags);
 	// delete_files_list(&files);
-	ft_lstprint(files);
 	return (0);
 }
