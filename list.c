@@ -42,14 +42,13 @@ static t_list   *new_file(char path[PATH_MAX], const char *name, const t_stat *s
 	file->size = stat->st_size;
 	file->type = stat->st_rdev;
 	file->time = stat->st_mtimespec.tv_sec;
-	file->next = NULL;
 	new->content = file;
 	new->content_size = sizeof(t_file);
 	new->next = NULL;
 	return (new);
 }
 
-int		append_file(t_list **lst, char path[PATH_MAX], char *name)
+static int		append_file(t_list **lst, char path[PATH_MAX], char *name)
 {
 	char	full_path[PATH_MAX];
 	t_stat	stat;
@@ -86,14 +85,26 @@ t_list          *create_list_from_args(int argc, char **argv)
 	return (begin);
 }
 
-// void			delete_args_list(t_list **lst)
-// {
-// 	t_list	*cur;
+t_list			*create_list_from_dir(char path[PATH_MAX], char *name, t_flags *flags)
+{
+	// printf("->create_list_from_dir: %s %s\n", path, name);
+	(void)flags;
+	DIR				*d;
+	struct dirent	*file;
+	t_list			*lst;
 
-// 	cur = *lst;
-// 	while (cur)
-// 	{
-// 		cur = cur->next;
-// 		ft_lstdel
-// 	}
-// }
+	if (d = opendir(path), !d)
+	{
+		print_errno(name);
+		return (NULL);
+	}
+	lst = NULL;
+	while ((file = readdir(d)))
+	{
+		if (ft_strcmp(file->d_name, ".") && ft_strcmp(file->d_name, ".."))
+			if (!append_file(&lst, path, file->d_name))
+				print_errno(file->d_name);
+	}
+	closedir(d);
+	return (lst);
+}

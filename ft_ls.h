@@ -39,8 +39,7 @@ typedef struct group	t_group;
 ** type     - the file type
 ** time     - the last modification time
 ** name     - the file name
-** path     - the full file path (without file name)
-** next     - 
+** path     - the full file path (without file name) 
 */
 
 typedef struct          s_file
@@ -54,7 +53,6 @@ typedef struct          s_file
 	time_t			    time;
 	char			    name[MAXNAMLEN];
 	char			    path[PATH_MAX];
-	t_list			    *next;
 }					    t_file;
 
 /*
@@ -73,11 +71,16 @@ void                    print_errno(char *src);
 */
 t_list                  *create_list_from_args(int argc, char **argv);
 t_list					*create_list_from_dir(char path[PATH_MAX], char *name, t_flags *flags);
-int						append_file(t_list **lst, char path[PATH_MAX], char *name);
 
 /*
-** helper functions
+** sorting lists
 */
-int                     get_full_path(char path[PATH_MAX], char *name, char full_path[PATH_MAX]);
+t_list					*sort_list(t_list *lst, t_flags *flags);
+
+
+/*
+** print files
+*/
+void					print(t_list *begin, t_flags *flags);
 
 #endif
