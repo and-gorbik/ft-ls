@@ -1,51 +1,51 @@
 #include "ft_ls.h"
 
-static void print_full_path(const char *path, t_flags *flags)
+static void print_files(t_list *lst, t_flags *flags)
 {
-	// printf("->print_full_path: %s\n", path);
-	if (flags->rr)
-	{
-		ft_putstr(path);
-		ft_putendl(":");
-	}
-}
+    char    *name;
 
-static void print_list(t_list *lst, t_flags *flags)
-{
-	// printf("->print_list\n\n");
-	(void)flags;
 	while (lst)
 	{
-		ft_putendl(((t_file *)lst->content)->name);
+        name = ((t_file *)lst->content)->name;
+        if (flags->a || name[0] != '.')
+            ft_putendl(name);
 		lst = lst->next;
 	}
 }
 
-void        print(t_list *begin, t_flags *flags)
+static void print_files_detailed(t_list *lst, t_flags *flags)
 {
-	// printf("->print\n");
-	t_list	*cur;
-	t_file	*file;
+    t_file  *file;
+    char    perms[10];
 
-	cur = begin;
-	while (cur)
-	{
-		file = (t_file *)cur->content;
-		if (S_ISDIR(file->mode))
-		{
-			// display full path where it's needed
-			print_full_path(file->path, flags);
-			begin = create_list_from_dir(file->path, file->name, flags);
-			if (begin)
-			{
-				begin = sort_list(begin, flags);
-				print_list(begin, flags);
-				if (flags->rr)
-					print(begin, flags);
-				// delete_list(&begin);
-			}
-		}
-		cur = cur->next;
-	}
+    while (lst)
+    {
+        file = (t_file *)lst->content;
+        if (flags->a || file->name[0] != '.')
+        {
+            ft_putchar(get_file_type(file->mode));
+            ft_putstr(get_permissions(file->mode, perms));
+            ft_putchar(' ');
+            ft_putnbr(file->nlinks);
+            ft_putchar('\t');
+            ft_putstr(getpwuid(file->uid)->pw_name);
+            ft_putchar(' ');
+            ft_putstr(getgrgid(file->gid)->gr_name);
+            ft_putchar(' ');
+            ft_put_ull_int(file->size);
+            ft_putchar('\t');
+            ft_putstr(format_time(ctime(&file->time)));
+            ft_putchar(' ');
+            ft_putendl(file->name);
+        }
+        lst = lst->next;
+    }
 }
 
+void        print(t_list *lst, t_flags *flags)
+{
+    if (flags->l)
+        print_files_detailed(lst, flags);
+    else
+        print_files(lst, flags);
+}

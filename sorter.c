@@ -21,7 +21,7 @@ static t_list   *before_min(t_list *lst, int cmp(const t_list *, const t_list *)
     return (prev);
 }
 
-t_list          *sort_list(t_list *lst, t_flags *flags)
+t_list          *sort(t_list *lst, t_flags *flags)
 {
     t_list  *sorted;
     t_list  *prev;

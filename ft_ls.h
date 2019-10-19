@@ -5,9 +5,9 @@
 # include <string.h>
 # include <dirent.h>
 # include <sys/stat.h>
-// # include <pwd.h>
-// # include <grp.h>
-// # include <uuid/uuid.h>
+# include <pwd.h>
+# include <grp.h>
+# include <uuid/uuid.h>
 # include <time.h>
 # include <sys/types.h>
 # include <sys/acl.h>
@@ -77,7 +77,7 @@ t_list					*create_list_from_dir(char path[PATH_MAX], char *name, t_flags *flags
 /*
 ** sorting lists
 */
-t_list					*sort_list(t_list *lst, t_flags *flags);
+t_list					*sort(t_list *files, t_flags *flags);
 
 /*
 ** comparators
@@ -85,8 +85,22 @@ t_list					*sort_list(t_list *lst, t_flags *flags);
 t_cmp					cmp_by_flag(t_flags *flags);
 
 /*
+** walk directories
+*/
+void					walk(t_list *files, t_flags *flags);
+
+/*
 ** print files
 */
-void					print(t_list *begin, t_flags *flags);
+void					print(t_list *files, t_flags *flags);
+
+
+/*
+** helper functions
+*/
+void					ft_put_ull_int(unsigned long long n);
+char					get_file_type(unsigned short mode);
+char					*get_permissions(unsigned short st_mode, char *perms);
+char    				*format_time(char *time);
 
 #endif
