@@ -30,7 +30,7 @@ void		walk(t_list *begin, t_flags *flags)
 				print(begin, flags);
 				if (flags->rr)
                     walk(begin, flags);
-				// delete_list(&begin);
+				ft_lstdel(&begin, deleter);
 			}
 		}
 		cur = cur->next;

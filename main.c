@@ -10,6 +10,6 @@ int		main(int argc, char **argv)
 	if (!(files = create_list_from_args(argc, argv)))
 		return (1);
 	walk(files, &flags);
-	// delete_files_list(&files);
+	ft_lstdel(&files, deleter);
 	return (0);
 }

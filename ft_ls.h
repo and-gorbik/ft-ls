@@ -94,7 +94,6 @@ void					walk(t_list *files, t_flags *flags);
 */
 void					print(t_list *files, t_flags *flags);
 
-
 /*
 ** helper functions
 */
@@ -102,5 +101,10 @@ void					ft_put_ull_int(unsigned long long n);
 char					get_file_type(unsigned short mode);
 char					*get_permissions(unsigned short st_mode, char *perms);
 char    				*format_time(char *time);
+
+/*
+** deleter
+*/
+void					deleter(void *content, size_t size);
 
 #endif
