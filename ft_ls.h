@@ -25,6 +25,8 @@ typedef struct          s_flags {
 	char		        a;
 }				        t_flags;
 
+typedef int				(* t_cmp)(const t_list *, const t_list *);
+
 typedef struct stat		t_stat;
 typedef struct dirent	t_dirent;
 typedef struct passwd	t_passwd;
@@ -77,6 +79,10 @@ t_list					*create_list_from_dir(char path[PATH_MAX], char *name, t_flags *flags
 */
 t_list					*sort_list(t_list *lst, t_flags *flags);
 
+/*
+** comparators
+*/
+t_cmp					cmp_by_flag(t_flags *flags);
 
 /*
 ** print files
