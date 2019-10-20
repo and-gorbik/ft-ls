@@ -15,7 +15,7 @@
 // # include <limits.h>
 // # include <sys/ioctl.h>
 # include <errno.h>
-# include "libft/libft.h"
+# include "libft.h"
 
 typedef struct          s_flags {
 	char		        l;
