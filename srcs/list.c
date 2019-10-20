@@ -87,7 +87,6 @@ t_list          *create_list_from_args(int argc, char **argv)
 
 t_list			*create_list_from_dir(char path[PATH_MAX], char *name, t_flags *flags)
 {
-	// printf("->create_list_from_dir: %s %s\n", path, name);
 	(void)flags;
 	DIR				*d;
 	struct dirent	*file;

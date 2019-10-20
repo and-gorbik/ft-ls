@@ -59,43 +59,51 @@ typedef struct          s_file
 
 /*
 ** parse flags
+** Source: flags.c
 */
 int                     parse_flags(t_flags *flags, int argc, char **argv);
 
 /*
 ** print errors
+** Source: errors.c
 */
 void                    print_usage(char *src);
 void                    print_errno(char *src);
 
 /*
 ** work with lists
+** Source: list.c
 */
 t_list                  *create_list_from_args(int argc, char **argv);
 t_list					*create_list_from_dir(char path[PATH_MAX], char *name, t_flags *flags);
 
 /*
 ** sorting lists
+** Source: sorter.c
 */
 t_list					*sort(t_list *files, t_flags *flags);
 
 /*
 ** comparators
+** Source: cmp.c
 */
 t_cmp					cmp_by_flag(t_flags *flags);
 
 /*
 ** walk directories
+** Source: walker.c
 */
 void					walk(t_list *files, t_flags *flags);
 
 /*
 ** print files
+** Source: printer.c
 */
 void					print(t_list *files, t_flags *flags);
 
 /*
 ** helper functions
+** Source: helpers.c
 */
 void					ft_put_ull_int(unsigned long long n);
 char					get_file_type(unsigned short mode);
@@ -104,6 +112,7 @@ char    				*format_time(char *time);
 
 /*
 ** deleter
+** Source: deleter.c
 */
 void					deleter(void *content, size_t size);
 

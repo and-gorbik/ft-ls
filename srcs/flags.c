@@ -2,7 +2,11 @@
 
 static int  set_flags(t_flags *flags, char *src)
 {
-	// printf("->set_flags\n");
+	flags->l = 0;
+	flags->r = 0;
+	flags->rr = 0;
+	flags->t = 0;
+	flags->a = 0;
 	while (*(++src)) {
 		switch (*src) {
 		case 'l':
@@ -30,7 +34,6 @@ static int  set_flags(t_flags *flags, char *src)
 
 int         parse_flags(t_flags *flags, int argc, char **argv)
 {
-	// printf("->parse_flags\n");
 	int		i;
 
 	i = 0;
@@ -39,11 +42,6 @@ int         parse_flags(t_flags *flags, int argc, char **argv)
 		if (!set_flags(flags, argv[i]))
             return (0);
 	}
-	// printf("a: %d\n", flags->a);
-	// printf("l: %d\n", flags->l);
-	// printf("r: %d\n", flags->r);
-	// printf("R: %d\n", flags->rr);
-	// printf("t: %d\n", flags->t);
 
 	return (1);
 }

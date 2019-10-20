@@ -2,7 +2,6 @@
 
 static void	print_full_path(const char *path, t_flags *flags)
 {
-	// printf("->print_full_path: %s\n", path);
 	if (flags->rr)
 	{
 		ft_putstr(path);
@@ -12,7 +11,6 @@ static void	print_full_path(const char *path, t_flags *flags)
 
 void		walk(t_list *begin, t_flags *flags)
 {
-	// printf("->print\n");
 	t_list	*cur;
 	t_file	*file;
 
