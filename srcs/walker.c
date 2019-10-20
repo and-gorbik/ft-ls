@@ -9,7 +9,7 @@ static void	print_full_path(const char *path, t_flags *flags)
 	}
 }
 
-void		walk(t_list *begin, t_flags *flags)
+static void	walk_dirs(t_list *begin, t_flags *flags)
 {
 	t_list	*cur;
 	t_file	*file;
@@ -27,11 +27,35 @@ void		walk(t_list *begin, t_flags *flags)
 				begin = sort(begin, flags);
 				print(begin, flags);
 				if (flags->rr)
-                    walk(begin, flags);
+                    walk_dirs(begin, flags);
 				ft_lstdel(&begin, deleter);
 			}
 		}
 		cur = cur->next;
 	}
+}
+
+void	walk(t_list *lst, t_flags *flags)
+{
+	t_list	*dirs;
+	t_list	*files;
+	t_list	*cur;
+
+	dirs = NULL;
+	files = NULL;
+	while (lst)
+	{
+		cur = lst;
+		lst = lst->next;
+		cur->next = NULL;
+		if (S_ISDIR(((t_file *)cur->content)->mode))
+			ft_lstappend(&dirs, cur);
+		else
+			ft_lstappend(&files, cur);
+	}
+	print(files, flags);
+	ft_lstdel(&files, deleter);
+	walk_dirs(dirs, flags);
+	ft_lstdel(&dirs, deleter);
 }
 
