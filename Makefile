@@ -1,7 +1,7 @@
 NAME = ft_ls
 SRCS = srcs/*.c
 LIBFT = libft/
-INCS = -I ./includes/ -I ./$(LIBFT)
+INCS = -I ./$(LIBFT)
 FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
